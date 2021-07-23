@@ -58,13 +58,19 @@ defmodule InstagramClone.Accounts.User do
   end
 
   defp validate_password(changeset, opts) do
-    changeset
-    |> validate_required([:password])
-    |> validate_length(:password, min: 12, max: 80)
-    # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
-    # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
-    |> maybe_hash_password(opts)
+    register_user? = Keyword.get(opts, :register_user, true)
+
+    if register_user? do
+      changeset
+      |> validate_required([:password])
+      |> validate_length(:password, min: 12, max: 80)
+      # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
+      # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
+      # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+      |> maybe_hash_password(opts)
+    else
+      changeset
+    end
   end
 
   defp maybe_hash_password(changeset, opts) do

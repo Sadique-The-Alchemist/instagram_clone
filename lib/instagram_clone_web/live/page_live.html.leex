@@ -1,10 +1,14 @@
-<h1 class="text-red-500 text-5xl font-bold text-center">Instagram Clone</h1>
-<div x-data="{ open: false }">
-<button @click="open = true">Open Dropdown</button>
-<ul x-show="open"
-@click.away="open = false"
->
-Dropdown body
+<section class="w-1/2 border-2 shadow-lg flex flex-col place-items-center mx-auto p-6">
+<h1 class="text-4xl font-bold italic text-gray-600">InstagramClone</h1>
+<p class="text-gray-400 font-semibold text-lg my-6" >Signup to see photos and videos from your friends </p>
 
-</ul>
-</div>
+<%=f = form_for @changeset, "#",
+phx_change: "validate",
+phx_submit: "save",
+phx_trigger_action: @trigger_submit,
+class: "flex flex-col space-y-4 w-full px-6"%>
+<div class="flex flex-col">
+<%= label f, :email,class: "text-gray-400" %>
+<%= email_input f, :email, class: "rounded border-gray-300 shadow-sm focus:ring-gray-900 focus:ring-opacity-50 focus:border-gray-900" %>
+
+</section>
