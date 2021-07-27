@@ -10,5 +10,16 @@ class: "flex flex-col space-y-4 w-full px-6"%>
 <div class="flex flex-col">
 <%= label f, :email,class: "text-gray-400" %>
 <%= email_input f, :email, class: "rounded border-gray-300 shadow-sm focus:ring-gray-900 focus:ring-opacity-50 focus:border-gray-900" %>
-
+<%= error_tab f, :email, class: "text-red-700 text-sm" %>
+</div>
+<div class="flex flex-col">
+<%= label f, :full_name, class: "text-gray-400" %>
+<%= text_input f, :full_name, class: "rounded border-gray-300 shadow-sm focus:ring-gray-900 focus:ring-opacity-50 focus:border-gray-900" %>
+<%= error_tag f, :full_name, class: "text-red-700 text-sm" %>
+</div>
+<div class="flex flex-col">
+<%= label f, :username, class: "text-gray-400" %>
+<%= text_input f,  :username, class: "rounded border-gray-300 shadow-sm focus:ring-gray-900 focus:ring-opacity-50 focus:border-gray-900" %>
+<%=error_tag f, :username, class: "text-red-700 text-sm" %>
+</div>
 </section>
