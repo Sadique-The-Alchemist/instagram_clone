@@ -9,7 +9,7 @@ defmodule InstagramClone.Accounts.User do
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
     field :username, :string
-    field :fullname, :string
+    field :full_name, :string
     field :avatar_url, :string, default: "/images/default-avatar.png"
     field :bio, :string
     field :website, :string
@@ -37,7 +37,7 @@ defmodule InstagramClone.Accounts.User do
   def registration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password, :username, :full_name, :avatar_url, :bio, :website])
-    |> validate_required([:username, :fullname])
+    |> validate_required([:username, :full_name])
     |> validate_length(:username, min: 5, max: 30)
     |> validate_format(:username, ~r/^[a-zA-Z0-9_.-]*$/,
       message: "Please use letters and numbers without space(only characters allowed _ . -)"
