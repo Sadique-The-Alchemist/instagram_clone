@@ -6,7 +6,7 @@ defmodule InstagramClone.Accounts do
   import Ecto.Query, warn: false
   alias InstagramClone.Repo
   alias InstagramClone.Accounts.{User, UserToken, UserNotifier}
-
+  alias InstagramCloneWeb.UserAuth
   ## Database getters
 
   @doc """
@@ -345,5 +345,15 @@ defmodule InstagramClone.Accounts do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+  def log_out_user(token) do
+    user = get_user_by_session_token(token)
+    # Delete all user tokens
+    Repo.delete_all(UserToken.user_and_contexts_query(user, :all))
+
+    InstagramCloneWeb.Endpoint.broadcast_from(self(), UserAuth.pubsub_topic(), "logout_user", %{
+      user: user
+    })
   end
 end

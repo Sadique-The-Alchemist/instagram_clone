@@ -5,7 +5,9 @@ defmodule InstagramCloneWeb.PageLive do
 
   @impl true
 
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    socket = assign_defaults(session, socket)
+
     changeset = Accounts.change_user_registration(%User{})
     {:ok, socket |> assign(changeset: changeset) |> assign(trigger_submit: false)}
   end
