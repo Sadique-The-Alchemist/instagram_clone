@@ -356,4 +356,14 @@ defmodule InstagramClone.Accounts do
       user: user
     })
   end
+
+  def change_user(user, attrs \\ %{}) do
+    User.registration_changeset(user, attrs, register_user: false)
+  end
+
+  def update_user(user, attrs) do
+    user
+    |> User.registration_changeset(attrs, register_user: false)
+    |> Repo.update()
+  end
 end

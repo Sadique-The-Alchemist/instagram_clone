@@ -2,5 +2,9 @@
   "devDependencies": {
     "@tailwindcss/forms": "^0.3.3",
     "postcss-import": "^14.0.2"
+  },
+  "dependencies": {
+    "prettier": "^2.3.2",
+    "prettier-plugin-eex": "^0.5.0"
   }
 }
