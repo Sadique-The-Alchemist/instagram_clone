@@ -9,7 +9,7 @@ defmodule InstagramClone.Uploaders.Avatar do
   end
 
   def get_avatar_url(socket, entry) do
-    Routes.static_path(socket, "/#{@upload_directory_name}/#{entry.uuid}/#{ext(entry)}")
+    Routes.static_path(socket, "/#{@upload_directory_name}/#{entry.uuid}.#{ext(entry)}")
   end
 
   def update(socket, old_url, entry) do
@@ -18,6 +18,7 @@ defmodule InstagramClone.Uploaders.Avatar do
     Phoenix.LiveView.consume_uploaded_entry(socket, entry, fn %{} = meta ->
       dest = Path.join(@upload_directory_path, "#{entry.uuid}.#{ext(entry)}")
       dest_thumb = Path.join(@upload_directory_path, "thumb_#{entry.uuid}.#{ext(entry)}")
+
       mogrify_thumbnail(meta.path, dest, 300)
       mogrify_thumbnail(meta.path, dest_thumb, 150)
 

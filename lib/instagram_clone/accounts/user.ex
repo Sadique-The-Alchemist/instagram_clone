@@ -10,7 +10,7 @@ defmodule InstagramClone.Accounts.User do
     field :confirmed_at, :naive_datetime
     field :username, :string
     field :full_name, :string
-    field :avatar_url, :string, default: "/images/default-avatar.png"
+    field :avatar_url, :string, default: "/uploads/default-avatar.png"
     field :bio, :string
     field :website, :string
 

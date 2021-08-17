@@ -10,11 +10,14 @@ defmodule InstagramCloneWeb.UserLive.Settings do
   def mount(_params, session, socket) do
     socket = assign_defaults(session, socket)
     changeset = Accounts.change_user(socket.assigns.current_user)
+    settings_path = Routes.live_path(socket, __MODULE__)
+    pass_settings_path = Routes.live_path(socket, InstagramCloneWeb.UserLive.PassSettings)
 
     {:ok,
      socket
      |> assign(changeset: changeset)
      |> assign(page_title: "Edit Profile")
+     |> assign(settings_path: settings_path, pass_settings_path: pass_settings_path)
      |> allow_upload(:avatar_url,
        accept: @extenstion_whitelist,
        max_file_size: 9_000_000,
@@ -33,6 +36,10 @@ defmodule InstagramCloneWeb.UserLive.Settings do
     {:noreply, socket |> assign(changeset: changeset)}
   end
 
+  def handle_event("validate", _params, socket) do
+    {:noreply, socket}
+  end
+
   @impl true
   def handle_event("save", %{"user" => user_params}, socket) do
     case Accounts.update_user(socket.assigns.current_user, user_params) do
@@ -47,8 +54,21 @@ defmodule InstagramCloneWeb.UserLive.Settings do
     end
   end
 
+  # def handle_event("update_avatar", _params, socket) do
+  #   uploaded_file =
+  #     consume_uploaded_entries(socket, :avatar_url, fn %{path: path}, _entry ->
+  #       dest =
+  #         Path.join([:code.priv_dir(:instagram_clone), "static", "uploads", Path.basename(path)])
+
+  #       File.cp!(path, dest)
+  #       Routes.static_path(socket, "/uploads/#{Path.basename(dest)}")
+  #     end)
+
+  #   {:noreply, update(socket, :uploaded_files, &(&1 ++ uploaded_file))}
+  # end
+
   def handle_progress(:avatar_url, entry, socket) do
-    if entry.done do
+    if entry.done? do
       avatar_url = Avatar.get_avatar_url(socket, entry)
       user_params = %{"avatar_url" => avatar_url}
 
@@ -59,7 +79,7 @@ defmodule InstagramCloneWeb.UserLive.Settings do
 
           current_user = Accounts.get_user!(socket.assigns.current_user.id)
 
-          {:norply,
+          {:noreply,
            socket
            |> put_flash(:info, "Avatar updated succesfully")
            |> assign(current_user: current_user)}
