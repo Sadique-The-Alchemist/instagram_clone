@@ -76,5 +76,6 @@ defmodule InstagramCloneWeb.Router do
     get "/users/confirm", UserConfirmationController, :new
     post "/users/confirm", UserConfirmationController, :create
     get "/users/confirm/:token", UserConfirmationController, :confirm
+    live ":username", UserLive.Profile
   end
 end

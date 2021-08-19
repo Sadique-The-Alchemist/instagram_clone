@@ -5,6 +5,11 @@ pass_settings_path: @pass_settings_path,
 current_uri_path: @current_uri_path
  %>
   <div class="w-full py-8">
+    <%= for {_ref, err} <- @uploads.avatar_url.errors do %>
+      <p class="text-red-500 w-full text-center">
+        <%= Phoenix.Naming.humanize(err) %>
+      </p>
+    <% end %>
     <div class="flex items-center">
       <div class="w-1/3">
         <%=img_tag Avatar.get_thumb(@current_user.avatar_url), class: "ml-auto w-10 h-10 rounded-full object-cover object-center" %>

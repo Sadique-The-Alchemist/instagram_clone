@@ -87,6 +87,8 @@ defmodule InstagramCloneWeb.UserLive.Settings do
         {:error, %Ecto.Changeset{} = changeset} ->
           {:noreply, assign(socket, :changeset, changeset)}
       end
+    else
+      {:noreply, socket}
     end
   end
 end

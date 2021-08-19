@@ -200,6 +200,7 @@ defmodule InstagramClone.Accounts do
       user
       |> User.password_changeset(attrs)
       |> User.validate_current_password(password)
+      |> Repo.update()
 
     Ecto.Multi.new()
     |> Ecto.Multi.update(:user, changeset)
@@ -365,5 +366,12 @@ defmodule InstagramClone.Accounts do
     user
     |> User.registration_changeset(attrs, register_user: false)
     |> Repo.update()
+  end
+
+  @doc """
+  Get the user name with username params
+  """
+  def profile(param) do
+    Repo.get_by!(User, username: param)
   end
 end

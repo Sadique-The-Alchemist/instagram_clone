@@ -1,0 +1,51 @@
+<header class="flex justify-center px-10">
+  <section class="w-1/4">
+    <%= img_tag @user.avatar_url, class: "w-40 h-40 rounded-full object-cover object-center" %>
+  </section>
+  <section class="w-3/4">
+    <div class="flex px-3 pt-3">
+      <h1 class="truncate md:overflow-clip text-2xl text-gray-500 mb-3"><%=@user.username %></h1>
+      <%=cond do %>
+        <%=@current_user && @current_user ==@user -> %>
+        <%=live_patch "Edit profile",to: Routes.live_path(@socket,InstagramCloneWeb.UserLive.Settings),
+     class: "py-1 px-2 mx-5 border-2 rounded font-semibold hover:bg-gray-50" %>
+        <% @current_user ->  %>
+        <%= live_component @socket,InstagramCloneWeb.UserLive.FollowComponent, id: @user.id, follow_btn_name?: @follow_btn_name?,follow_btn_styles?: @follow_btn_styles? %>
+        <% true -> %>
+        <%= link "Follow", to: Routes.user_session_path(@socket, :new),class: "py-1 px-5 border-none shadow rounded text-gray-50 hover:bg-light-blue-600 bg-light-blue-500" %>
+      <% end %>
+    </div>
+    <div>
+      <ul class="flex p-3">
+        <li><b>0</b>Posts</li>
+        <li class="ml-11"><b>0</b>Followers</li>
+        <li class="ml-11"><b>0</b>Following</li>
+      </ul>
+    </div>
+    <div class="p-3">
+      <h2 class="text-md text-gray-600 font-bold"><%=@user.full_name %></h2>
+      <%= if @user.bio do %>
+        <p class="max-w-full break-words"><%=@user.bio %></p>
+      <% end %>
+      <%=if @user.website do %>
+        <%= link display_website_uri(@user.website), to: @user.website, target: "_blank",rel: "noreferrer",class: "text-blue-700" %>
+      <% end %>
+    </div>
+  </section>
+  <section class="border-t-2 mt-5">
+    <ul class="flux justify-center text-center space-x-20">
+      <li class="pt-4 px-1 text-sm text-gray-600 border-t-2 border-black -mt-0.5">
+        POSTS
+      </li>
+      <li class="pt-4 px-1 text-sm text-gray-400">
+        IGTV
+      </li>
+      <li class="pt-4 px-1 text-sm text-gray-400">
+        SAVED
+      </li>
+      <li class="pt-4 px-1 text-sm text-gray-400">
+        TAGGED
+      </li>
+    </ul>
+  </section>
+</header>

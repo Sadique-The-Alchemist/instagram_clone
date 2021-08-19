@@ -50,6 +50,7 @@ defmodule InstagramCloneWeb do
       unquote(view_helpers())
       import InstagramCloneWeb.LiveHelpers
       alias InstagramClone.Accounts.User
+      alias InstagramClone.Accounts
       @impl true
       def handle_info(%{event: "logout_user", payload: %{user: %User{id: id}}}, socket) do
         with %User{id: ^id} <- socket.assigns.current_user do
@@ -62,9 +63,27 @@ defmodule InstagramCloneWeb do
         end
       end
 
+      @doc """
+      Because we are calling this function in each liveview,
+      and we need access to username params in our profile live view
+      we updated this function for when the username param is pressent
+      get the user and assign it to along with page title to the socket
+      """
+
       @impl true
-      def handle_params(_unsigned_params, uri, socket) do
-        {:noreply, socket |> assign(current_uri_path: URI.parse(uri).path)}
+      def handle_params(params, uri, socket) do
+        case params do
+          %{"username" => username} ->
+            user = Accounts.profile(username)
+
+            {:noreply,
+             socket
+             |> assign(current_uri_path: URI.parse(uri).path)
+             |> assign(user: user, page_title: "#{user.full_name}(@#{user.username})")}
+
+          _ ->
+            {:noreply, socket |> assign(current_uri_path: URI.parse(uri).path)}
+        end
       end
     end
   end

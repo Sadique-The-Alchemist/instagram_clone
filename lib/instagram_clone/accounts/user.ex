@@ -1,6 +1,7 @@
 defmodule InstagramClone.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias InstagramClone.Acconts.Follows
 
   @derive {Inspect, except: [:password]}
   schema "users" do
@@ -13,6 +14,10 @@ defmodule InstagramClone.Accounts.User do
     field :avatar_url, :string, default: "/uploads/default-avatar.png"
     field :bio, :string
     field :website, :string
+    field :followers_count, :integer, default: 0
+    field :following_count, :integer, default: 0
+    has_many :following, Follows, foreign_key: :follower_id
+    has_many :followers, Follows, foreign_key: :followed_id
 
     timestamps()
   end
@@ -45,6 +50,7 @@ defmodule InstagramClone.Accounts.User do
     |> unique_constraint(:username)
     |> unsafe_validate_unique(:username, InstagramClone.Repo)
     |> validate_length(:full_name, min: 4, max: 30)
+    |> validate_format(:full_name, ~r/^[a-zA-Z0-9]*$/, message: "Please use letters and numbers")
     |> validate_email()
     |> validate_password(opts)
   end
