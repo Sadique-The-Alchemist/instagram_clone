@@ -79,7 +79,8 @@ defmodule InstagramCloneWeb do
             {:noreply,
              socket
              |> assign(current_uri_path: URI.parse(uri).path)
-             |> assign(user: user, page_title: "#{user.full_name}(@#{user.username})")}
+             |> assign(user: user)
+             |> assign(page_title: "#{user.full_name}(@#{user.username})")}
 
           _ ->
             {:noreply, socket |> assign(current_uri_path: URI.parse(uri).path)}

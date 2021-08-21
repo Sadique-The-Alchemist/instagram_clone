@@ -1,7 +1,7 @@
 defmodule InstagramClone.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
-  alias InstagramClone.Acconts.Follows
+  alias InstagramClone.Accounts.Follows
 
   @derive {Inspect, except: [:password]}
   schema "users" do
@@ -17,7 +17,9 @@ defmodule InstagramClone.Accounts.User do
     field :followers_count, :integer, default: 0
     field :following_count, :integer, default: 0
     has_many :following, Follows, foreign_key: :follower_id
-    has_many :followers, Follows, foreign_key: :followed_id
+    has_many :follower, Follows, foreign_key: :followed_id
+    has_many :followings, through: [:following, :followed]
+    has_many :followers, through: [:follower, :follower]
 
     timestamps()
   end
@@ -51,9 +53,34 @@ defmodule InstagramClone.Accounts.User do
     |> unsafe_validate_unique(:username, InstagramClone.Repo)
     |> validate_length(:full_name, min: 4, max: 30)
     |> validate_format(:full_name, ~r/^[a-zA-Z0-9]*$/, message: "Please use letters and numbers")
+    |> validate_website_schemas()
+    |> validate_website_authority()
     |> validate_email()
     |> validate_password(opts)
   end
+
+  defp validate_website_schemas(changeset) do
+    validate_change(changeset, :website, fn :website, website ->
+      uri = URI.parse(website)
+      if uri.scheme, do: check_uri_scheme(uri.scheme), else: [website: "Enter valid website"]
+    end)
+  end
+
+  defp validate_website_authority(changeset) do
+    validate_change(changeset, :website, fn :website, website ->
+      authority = URI.parse(website).authority
+
+      if String.match?(authority, ~r/^[a-zA-Z0-9.-]*$/) do
+        []
+      else
+        [website: "Enter a valid website"]
+      end
+    end)
+  end
+
+  defp check_uri_scheme(scheme) when scheme == "http", do: []
+  defp check_uri_scheme(scheme) when scheme == "https", do: []
+  defp check_uri_scheme(_scheme), do: [website: "Enter a valid website"]
 
   defp validate_email(changeset) do
     changeset

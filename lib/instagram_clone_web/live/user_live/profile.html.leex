@@ -6,20 +6,20 @@
     <div class="flex px-3 pt-3">
       <h1 class="truncate md:overflow-clip text-2xl text-gray-500 mb-3"><%=@user.username %></h1>
       <%=cond do %>
-        <%=@current_user && @current_user ==@user -> %>
-        <%=live_patch "Edit profile",to: Routes.live_path(@socket,InstagramCloneWeb.UserLive.Settings),
-     class: "py-1 px-2 mx-5 border-2 rounded font-semibold hover:bg-gray-50" %>
         <% @current_user ->  %>
-        <%= live_component @socket,InstagramCloneWeb.UserLive.FollowComponent, id: @user.id, follow_btn_name?: @follow_btn_name?,follow_btn_styles?: @follow_btn_styles? %>
+        <%= live_component @socket,
+        InstagramCloneWeb.UserLive.FollowComponent,
+         id: @user.id,
+         current_user: @current_user, user: @user %>
         <% true -> %>
-        <%= link "Follow", to: Routes.user_session_path(@socket, :new),class: "py-1 px-5 border-none shadow rounded text-gray-50 hover:bg-light-blue-600 bg-light-blue-500" %>
+        <%= link "Follow", to: Routes.user_session_path(@socket, :new),class: "user-profile-follow-btn" %>
       <% end %>
     </div>
     <div>
       <ul class="flex p-3">
         <li><b>0</b>Posts</li>
-        <li class="ml-11"><b>0</b>Followers</li>
-        <li class="ml-11"><b>0</b>Following</li>
+        <li class="ml-11"><b><%=@user.followers_count%></b>Followers</li>
+        <li class="ml-11"><b><%=@user.following_count%></b>Following</li>
       </ul>
     </div>
     <div class="p-3">

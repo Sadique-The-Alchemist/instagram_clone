@@ -1,7 +1,7 @@
-defmodule InstagramClone.Acconts.Follows do
+defmodule InstagramClone.Accounts.Follows do
   use Ecto.Schema
   import Ecto.Changeset
-  alias InstagramClone.Acconts.User
+  alias InstagramClone.Accounts.User
 
   schema "accounts_follows" do
     belongs_to :follower, User
@@ -12,7 +12,7 @@ defmodule InstagramClone.Acconts.Follows do
   @doc false
   def changeset(follows, attrs) do
     follows
-    |> cast(attrs, [])
-    |> validate_required([])
+    |> cast(attrs, [:follower_id, :followed_id])
+    |> validate_required([:follower_id, :followed_id])
   end
 end

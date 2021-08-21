@@ -6,6 +6,15 @@
 @import "tailwindcss/utilities";
 
 
+@layer components {
+  .user-profile-unfollow-btn{
+    @apply py-1 px-2 text-red-500 border-2 rounded font-semibold hover:bg-gray-50
+  }
+  .user-profile-follow-btn{
+    @apply py-1 px-5 border-none shadow rounded text-gray-50 hover:bg-light-blue-600 bg-light-blue-500
+  }
+}
+.while-submitting {display: none;}
 
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,
@@ -14,8 +23,8 @@
 }
 
 .phx-click-loading {
-  opacity: 0.5;
-  transition: opacity 1s ease-out;
+  .while-submitting{display: inline;}
+  .btns {display: none;}
 }
 
 .phx-disconnected{

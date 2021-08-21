@@ -5,7 +5,7 @@ defmodule InstagramClone.Accounts do
 
   import Ecto.Query, warn: false
   alias InstagramClone.Repo
-  alias InstagramClone.Accounts.{User, UserToken, UserNotifier}
+  alias InstagramClone.Accounts.{User, UserToken, UserNotifier, Follows}
   alias InstagramCloneWeb.UserAuth
   ## Database getters
 
@@ -373,5 +373,52 @@ defmodule InstagramClone.Accounts do
   """
   def profile(param) do
     Repo.get_by!(User, username: param)
+  end
+
+  def create_follows(follower, followed) do
+    qfollower = from(u in User, where: u.id == ^follower.id)
+    qfollowed = from(u in User, where: u.id == ^followed.id, select: u)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.insert(
+      :follows,
+      Follows.changeset(%Follows{}, %{follower_id: follower.id, followed_id: followed.id})
+    )
+    |> Ecto.Multi.update_all(:update_following, qfollower, inc: [following_count: 1])
+    |> Ecto.Multi.update_all(:update_followers, qfollowed, inc: [followers_count: 1])
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{update_followers: updated_followers}} ->
+        {1, user} = updated_followers
+        hd(user)
+    end
+  end
+
+  def unfollow(follower, followed) do
+    qfollower = from(u in User, where: u.id == ^follower.id)
+    qfollowed = from(u in User, where: u.id == ^followed.id, select: u)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.delete(:follow, follows?(follower, followed))
+    |> Ecto.Multi.update_all(:update_following, qfollower, inc: [following_count: -1])
+    |> Ecto.Multi.update_all(:update_followers, qfollowed, inc: [followers_count: -1])
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{update_followers: updated_followers}} ->
+        {1, user} = updated_followers
+        hd(user)
+    end
+  end
+
+  def list_followers(user) do
+    Repo.preload(user, :followers)
+  end
+
+  def list_followings(user) do
+    Repo.preload(user, :followings)
+  end
+
+  def follows?(follower, followed) do
+    Repo.get_by(Follows, follower_id: follower.id, followed_id: followed.id)
   end
 end
