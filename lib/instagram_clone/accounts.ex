@@ -411,11 +411,14 @@ defmodule InstagramClone.Accounts do
   end
 
   def list_followers(user) do
-    Repo.preload(user, :followers)
+    user = Repo.preload(user, followers: [:follower])
+
+    user.followers
   end
 
   def list_followings(user) do
-    Repo.preload(user, :followings)
+    user = Repo.preload(user, followings: [:following])
+    user.followings
   end
 
   def follows?(follower, followed) do

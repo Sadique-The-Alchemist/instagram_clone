@@ -48,7 +48,7 @@
                   </svg>
                 </li>
                 <li class="w-7 h-7 ml-6 text-gray-600">
-                  <%=live_patch to: Routes.live_path(@socket, InstagramCloneWeb.UserLive.Profile,@current_user.username) do %>
+                  <%=live_patch to: Routes.user_profile_path(@socket,:index,@current_user.username) do %>
                     <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -97,7 +97,7 @@
             x-transition:leave-end="opacity-0 transform scale-90"
           >
                       <%= live_patch to: "" do %>
-                        <li @click="open=false" class="py-2 px-4 hover:bg-gray-50">Profile</li>
+                        <li  class="py-2 px-4 hover:bg-gray-50">Profile</li>
                       <% end %>
                       <li class="py-2 px-4 hover:bg-gray-50">Saved</li>
                       <%= live_patch to: "" do %>

@@ -25,4 +25,9 @@ defmodule InstagramCloneWeb.PageLive do
   def handle_event("save", _, socket) do
     {:noreply, assign(socket, trigger_submit: true)}
   end
+
+  @impl true
+  def handle_params(_params, uri, socket) do
+    {:noreply, socket |> assign(current_uri_path: URI.parse(uri).path)}
+  end
 end

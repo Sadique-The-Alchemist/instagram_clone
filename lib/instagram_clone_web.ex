@@ -62,30 +62,6 @@ defmodule InstagramCloneWeb do
           _ -> {:noreply, socket}
         end
       end
-
-      @doc """
-      Because we are calling this function in each liveview,
-      and we need access to username params in our profile live view
-      we updated this function for when the username param is pressent
-      get the user and assign it to along with page title to the socket
-      """
-
-      @impl true
-      def handle_params(params, uri, socket) do
-        case params do
-          %{"username" => username} ->
-            user = Accounts.profile(username)
-
-            {:noreply,
-             socket
-             |> assign(current_uri_path: URI.parse(uri).path)
-             |> assign(user: user)
-             |> assign(page_title: "#{user.full_name}(@#{user.username})")}
-
-          _ ->
-            {:noreply, socket |> assign(current_uri_path: URI.parse(uri).path)}
-        end
-      end
     end
   end
 
