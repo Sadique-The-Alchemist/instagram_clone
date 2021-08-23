@@ -14,8 +14,7 @@ defmodule InstagramCloneWeb.UserLive.Profile do
   end
 
   @impl true
-  def handle_params(_params, uri, socket) do
-    socket = socket |> assign(current_uri_path: URI.parse(uri).path)
+  def handle_params(_params, _uri, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action)}
   end
 
