@@ -69,6 +69,7 @@ defmodule InstagramCloneWeb.Router do
     live "/accounts/password/edit", UserLive.PassSettings
     live "/:username/following", UserLive.Profile, :following
     live "/:username/followers", UserLive.Profile, :followers
+    live "/p/new", PostLive.New
   end
 
   scope "/", InstagramCloneWeb do
@@ -79,5 +80,6 @@ defmodule InstagramCloneWeb.Router do
     post "/users/confirm", UserConfirmationController, :create
     get "/users/confirm/:token", UserConfirmationController, :confirm
     live ":username", UserLive.Profile, :index
+    live "/p/:id", PostLive.Show
   end
 end

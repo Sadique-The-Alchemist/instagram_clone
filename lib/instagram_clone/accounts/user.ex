@@ -1,7 +1,7 @@
 defmodule InstagramClone.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
-  alias InstagramClone.Accounts.Follows
+  alias InstagramClone.{Accounts.Follows, Posts.Post}
 
   @derive {Inspect, except: [:password]}
   schema "users" do
@@ -16,10 +16,12 @@ defmodule InstagramClone.Accounts.User do
     field :website, :string
     field :followers_count, :integer, default: 0
     field :following_count, :integer, default: 0
+    field :posts_count, :integer, default: 0
     has_many :following, Follows, foreign_key: :follower_id
     has_many :follower, Follows, foreign_key: :followed_id
     has_many :followings, through: [:following, :followed]
     has_many :followers, through: [:follower, :follower]
+    has_many :posts, Post
 
     timestamps()
   end

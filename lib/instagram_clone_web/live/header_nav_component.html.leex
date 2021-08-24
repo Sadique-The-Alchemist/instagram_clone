@@ -16,7 +16,7 @@
         <ul x-data="{open: false}" class="flex justify-end">
           <%= if @current_user do %>
             <li class="w-7 h-7 text-gray-600">
-              <%= live_patch to: Routes.page_path(@socket, :index) do %>
+              <%= live_patch to: Routes.live_path(@socket, InstagramCloneWeb.PageLive.New) do %>
                 <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
