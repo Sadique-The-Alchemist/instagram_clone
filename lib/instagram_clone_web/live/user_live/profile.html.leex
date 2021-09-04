@@ -38,7 +38,7 @@ return_to: Routes.user_profile_path(@socket,:index,@user.username)
     </div>
     <div>
       <ul class="flex p-3">
-        <li><b>0</b>Posts</li>
+        <li><b><%= @user.posts_count%></b>Posts</li>
         <%=live_patch to: Routes.user_profile_path(@socket, :followers, @user.username) do %>
           <li class="ml-11"><b><%=@user.followers_count%></b>Followers</li>
         <% end %>
@@ -74,3 +74,15 @@ return_to: Routes.user_profile_path(@socket,:index,@user.username)
     </ul>
   </section>
 </header>
+<div id="posts" phx-update="append" class ="mt-9 grid gap-8 grid-cols-3">
+  <%=for post <-@posts do %>
+    <%= live_redirect img_tag(post.photo_url, class: "object-cover h-80 w-full"),
+id: post.url_id,
+to: Routes.live_path(@socket, InstagramCloneWeb.PostLive.Show, post.url_id) %>
+  <% end %>
+</div>
+<div
+id="profile-posts-footer"
+class="flex justify-center"
+phx-hook="ProfilePostsScroll">
+</div>

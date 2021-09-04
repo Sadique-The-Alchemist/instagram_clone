@@ -10,7 +10,7 @@ defmodule InstagramClone.Uploaders.Post do
     ext
   end
 
-  def put_post_path(socket, %Post{} = post) do
+  def put_image_url(socket, %Post{} = post) do
     {completed, []} = Phoenix.LiveView.uploaded_entries(socket, :photo_url)
 
     urls =

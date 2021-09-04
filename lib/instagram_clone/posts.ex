@@ -117,4 +117,21 @@ defmodule InstagramClone.Posts do
   def change_post(%Post{} = post, attrs \\ %{}) do
     Post.changeset(post, attrs)
   end
+
+  @doc """
+  Retrun the list of paginated posts of given user id.
+  ## Examples
+  iex> list_user_posts(page: 1, per_page: 10, user_id: 1)
+  [%{photo_url: "", url_id: ""},...]
+  """
+
+  def list_profile_posts(page: page, per_page: per_page, user_id: user_id) do
+    Post
+    |> select([p], map(p, [:url_id, :photo_url]))
+    |> where(user_id: ^user_id)
+    |> limit(^per_page)
+    |> offset(^((page - 1) * per_page))
+    |> order_by(desc: :id)
+    |> Repo.all()
+  end
 end

@@ -17,7 +17,21 @@ import { Socket } from "phoenix"
 import NProgress from "nprogress"
 import { LiveSocket } from "phoenix_live_view"
 import Alpine from "alpinejs"
-
+let Hooks = {}
+Hooks.ProfilePostsScroll={
+    mounted(){
+        this.observer = new IntersectionObserver(entries => {
+            const entry  = entries[0];
+            if(entry.isIntersecting){
+                this.pushEvent("load-more-profile-posts");
+            }
+        });
+        this.observer.observe(this.el)
+    },
+    destroyed(){
+        this.observer.disconnect();
+    }
+}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
@@ -43,4 +57,3 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
-
